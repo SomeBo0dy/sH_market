@@ -143,6 +143,28 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements Go
     }
 
     @Override
+    public ResponseResult goodUpdate(Good good) {
+        if (!StringUtils.hasText(good.getTitle())) {
+            throw new SystemException(AppHttpCodeEnum.GOOD_TITLE_NOT_NULL);
+        }
+        if (!StringUtils.hasText(good.getName())) {
+            throw new SystemException(AppHttpCodeEnum.GOOD_NAME_NOT_NULL);
+        }
+        if (Objects.isNull(good.getCategoryId())) {
+            throw new SystemException(AppHttpCodeEnum.GOOD_CATE_NOT_NULL);
+        }
+        if (Objects.isNull(good.getPrize())) {
+            throw new SystemException(AppHttpCodeEnum.GOOD_PRICE_NOT_NULL);
+        }
+        Long userId = SecurityUtils.getUserId();
+        good.setUserId(userId);
+        updateById(good);
+        //TODO 未测试
+        //TODO 图片介绍
+        return ResponseResult.okResult();
+    }
+
+    @Override
     public ResponseResult setGoodStatusById(String state, Long id) {
         goodMapper.setGoodStatusById(state, id);
 //        Good good = getById(id);

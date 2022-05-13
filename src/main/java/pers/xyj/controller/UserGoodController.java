@@ -25,6 +25,14 @@ public class UserGoodController {
         return goodService.goodUpload(good);
     }
 
+    @ApiOperation(value="修改商品信息")
+    @SystemLog(businessName = "修改商品信息")
+    @PreAuthorize("hasAuthority('system:object:upload')")
+    @PutMapping("/goods/upload")
+    public ResponseResult goodUpdate(@RequestBody Good good){
+        return goodService.goodUpdate(good);
+    }
+
     @ApiOperation(value="获取该用户通过审核的未出售商品列表")
     @SystemLog(businessName = "获取该用户通过审核的未出售商品列表")
     @GetMapping("/goodList/unsold")

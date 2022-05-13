@@ -33,4 +33,6 @@ public interface GoodService extends IService<Good> {
     ResponseResult deleteOwnGoodById(Long id);
 
     ResponseResult getOrderListByState(Integer pageNum, Integer pageSize, int orderState);
+
+    ResponseResult goodUpdate(Good good);
 }
