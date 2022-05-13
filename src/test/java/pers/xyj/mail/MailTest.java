@@ -13,12 +13,6 @@ public class MailTest {
 
     Mail mail = new Mail();
 
-    private void init(){
-        mail.setGId(1L);
-        mail.setMailTo("979084805@qq.com");
-        mail.setSubject("啊对对对");
-        mail.setMessage("真好，会发邮件了呢");
-    }
 
     @Test
     public void simpleMailTest(){
