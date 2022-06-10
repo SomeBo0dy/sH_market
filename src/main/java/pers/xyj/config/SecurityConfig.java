@@ -68,6 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/logout").authenticated()
 
                 .antMatchers("/user/**").authenticated()
+                .antMatchers("/users/userinfo").authenticated()
                 .antMatchers("/upload/**").authenticated()
                 .antMatchers("/users/userInfo").authenticated()
                 .antMatchers("/sys/**").access("hasAuthority('system:admin')")

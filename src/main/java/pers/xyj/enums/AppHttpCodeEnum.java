@@ -23,7 +23,13 @@ public enum AppHttpCodeEnum {
 
     FILE_TYPE_ERROR(515,"请上传png文件" ),
     TYPE_ERROR(516,"用户类型错误" ),
-    GOOD_DELETE_NULL(517,"该商品不存在" );
+    GOOD_NOT_EXIST(517,"该商品不存在" ),
+    ORDER_ERROR(518,"订单异常" ),
+    ORDER_ERROR_DEL(519,"订单重复" ),
+    ORDER_ERROR_NULL(520,"订单不存在" ),
+    ORDER_ERROR_GOOD_NOT_EXIST(521,"订单异常，商品不存在" ),
+    ORDER_ERROR_WRONG_OWENER(522,"订单异常,卖家错误" ),
+    ORDER_ERROR_DONE(523,"该订单已完成" );
     int code;
     String msg;
 

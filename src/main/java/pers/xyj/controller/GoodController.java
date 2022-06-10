@@ -37,5 +37,4 @@ public class GoodController {
         return goodService.getGoodDetail(id);
     }
 
-
 }

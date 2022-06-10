@@ -23,6 +23,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("sm_good")
 public class Good  {
+
     @TableId(type = IdType.AUTO)
     private Long gId;
 

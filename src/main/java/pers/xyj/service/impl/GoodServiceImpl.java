@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -57,7 +58,6 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements Go
         LambdaQueryWrapper<Good> queryWrapper = new LambdaQueryWrapper<>();
 
         queryWrapper.eq(Good::getState, SystemConstants.GOOD_STATUS_APPROVED);
-        queryWrapper.eq(Good::getSold, SystemConstants.GOOD_NOT_SOLD);
         queryWrapper.eq(Objects.nonNull(categoryId) && categoryId > 0, Good::getCategoryId, categoryId);
         //按想要人数降序
         queryWrapper.orderByDesc(Good::getWantCount);
@@ -105,7 +105,6 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements Go
     public ResponseResult getAllGoodListByState(Integer pageNum, Integer pageSize, Long categoryId, String goodState) {
         LambdaQueryWrapper<Good> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Good::getState, goodState);
-        queryWrapper.eq(Good::getSold, SystemConstants.GOOD_NOT_SOLD);
         queryWrapper.eq(Objects.nonNull(categoryId) && categoryId > 0, Good::getCategoryId, categoryId);
         Page<Good> page = new Page<>(pageNum, pageSize);
         page(page, queryWrapper);
@@ -125,20 +124,23 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements Go
         queryWrapper.eq(Good::getGId, id);
         int count = goodMapper.delete(queryWrapper);
         if (count == 0) {
-            throw new SystemException(AppHttpCodeEnum.GOOD_DELETE_NULL);
+            throw new SystemException(AppHttpCodeEnum.GOOD_NOT_EXIST);
         }
+        LambdaQueryWrapper<Order> orderWrapper = new LambdaQueryWrapper<>();
+        orderWrapper.eq(Order::getGId, id);
+        Order order = new Order();
+        order.setState(2);
+        orderService.update(order, orderWrapper);
         return ResponseResult.okResult();
 
     }
 
     @Override
-    public ResponseResult getOrderListByState(Integer pageNum, Integer pageSize, int orderState) {
-        LoginUser loginUser = SecurityUtils.getLoginUser();
-        User user = loginUser.getUser();
+    public ResponseResult getOrderListByState(User user, Integer pageNum, Integer pageSize, int orderState) {
         Long userId = user.getId();
-        IPage<OrderVo> page = new Page<>(pageNum,pageSize);
-        orderMapper.getPage(page,userId,orderState);
-        PageVo pageVo = new PageVo(page.getRecords(),page.getPages());
+        IPage<OrderVo> page = new Page<>(pageNum, pageSize);
+        orderMapper.getPage(page, userId, orderState);
+        PageVo pageVo = new PageVo(page.getRecords(), page.getPages());
         return ResponseResult.okResult(pageVo);
     }
 
@@ -159,20 +161,15 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements Go
         Long userId = SecurityUtils.getUserId();
         good.setUserId(userId);
         updateById(good);
-        //TODO 未测试
-        //TODO 图片介绍
         return ResponseResult.okResult();
     }
 
     @Override
     public ResponseResult setGoodStatusById(String state, Long id) {
-        goodMapper.setGoodStatusById(state, id);
-//        Good good = getById(id);
-//        Long userId = good.getUserId();
-//        if (state.equals(SystemConstants.GOOD_STATUS_APPROVED)){
-//            userMapper.updateGoodCountById(userId);
-//        }
-
+        Long result = goodMapper.setGoodStatusById(state, id);
+        if (result == 0) {
+            throw new SystemException(AppHttpCodeEnum.GOOD_NOT_EXIST);
+        }
         return ResponseResult.okResult();
     }
 
@@ -193,8 +190,6 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements Go
         Long userId = SecurityUtils.getUserId();
         good.setUserId(userId);
         save(good);
-        //TODO 未测试
-        //TODO 图片介绍
         return ResponseResult.okResult();
     }
 

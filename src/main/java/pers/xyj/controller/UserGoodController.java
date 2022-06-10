@@ -9,7 +9,13 @@ import pers.xyj.annotation.SystemLog;
 import pers.xyj.constants.SystemConstants;
 import pers.xyj.domain.ResponseResult;
 import pers.xyj.domain.entity.Good;
+import pers.xyj.domain.entity.LoginUser;
+import pers.xyj.domain.entity.Order;
+import pers.xyj.domain.entity.User;
 import pers.xyj.service.GoodService;
+import pers.xyj.service.UserService;
+import pers.xyj.utils.SecurityUtils;
+
 @Api(value = "UserControllerApi",tags={"用户商品操作接口"})
 @RestController
 @RequestMapping("/user")
@@ -17,9 +23,11 @@ public class UserGoodController {
     @Autowired
     private GoodService goodService;
 
+    @Autowired
+    private UserService userService;
+
     @ApiOperation(value="提交上传商品信息")
     @SystemLog(businessName = "提交上传商品信息")
-    @PreAuthorize("hasAuthority('system:object:upload')")
     @PostMapping("/goods/upload")
     public ResponseResult goodUpload(@RequestBody Good good){
         return goodService.goodUpload(good);
@@ -27,7 +35,6 @@ public class UserGoodController {
 
     @ApiOperation(value="修改商品信息")
     @SystemLog(businessName = "修改商品信息")
-    @PreAuthorize("hasAuthority('system:object:upload')")
     @PutMapping("/goods/upload")
     public ResponseResult goodUpdate(@RequestBody Good good){
         return goodService.goodUpdate(good);
@@ -65,13 +72,29 @@ public class UserGoodController {
     @SystemLog(businessName = "获取该用户的交易完成的商品列表")
     @GetMapping("/goodList/doOrder")
     public ResponseResult doOrderList(Integer pageNum, Integer pageSize){
-        return goodService.getOrderListByState(pageNum,pageSize, SystemConstants.ORDER_DONE);
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        User user = loginUser.getUser();
+        return goodService.getOrderListByState(user,pageNum,pageSize, SystemConstants.ORDER_DONE);
     }
 
     @ApiOperation(value="获取该用户的交易处理中的商品列表")
     @SystemLog(businessName = "获取该用户的交易处理中的商品列表")
     @GetMapping("/goodList/unOrder")
     public ResponseResult unOrderList(Integer pageNum, Integer pageSize){
-        return goodService.getOrderListByState(pageNum,pageSize, SystemConstants.ORDER_UNDO);
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        User user = loginUser.getUser();
+        return goodService.getOrderListByState(user,pageNum,pageSize, SystemConstants.ORDER_UNDO);
+    }
+    @ApiOperation(value = "用户下订单")
+    @SystemLog(businessName = "用户下订单")
+    @PostMapping("/order/{id}")
+    public ResponseResult orderGood(@PathVariable Long id){
+        return userService.orderGood(id);
+    }
+    @ApiOperation(value = "卖家确定成交")
+    @SystemLog(businessName = "卖家确定成交")
+    @PostMapping("/deal")
+    public ResponseResult deal(@RequestBody Order order){
+        return userService.deal(order);
     }
 }

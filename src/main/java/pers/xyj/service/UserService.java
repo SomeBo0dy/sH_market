@@ -2,6 +2,7 @@ package pers.xyj.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import pers.xyj.domain.ResponseResult;
+import pers.xyj.domain.entity.Order;
 import pers.xyj.domain.entity.User;
 
 
@@ -18,4 +19,8 @@ public interface UserService extends IService<User> {
     ResponseResult userInfo(Long userId);
 
     ResponseResult updateUserInfo(User user);
+
+    ResponseResult orderGood(Long gId);
+
+    ResponseResult deal(Order order);
 }

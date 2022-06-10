@@ -3,6 +3,7 @@ package pers.xyj.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import pers.xyj.domain.ResponseResult;
 import pers.xyj.domain.entity.Good;
+import pers.xyj.domain.entity.User;
 
 
 /**
@@ -32,7 +33,7 @@ public interface GoodService extends IService<Good> {
 
     ResponseResult deleteOwnGoodById(Long id);
 
-    ResponseResult getOrderListByState(Integer pageNum, Integer pageSize, int orderState);
+    ResponseResult getOrderListByState(User user, Integer pageNum, Integer pageSize, int orderState);
 
     ResponseResult goodUpdate(Good good);
 }
