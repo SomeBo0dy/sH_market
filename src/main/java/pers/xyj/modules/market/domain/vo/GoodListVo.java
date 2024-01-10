@@ -19,6 +19,7 @@ public class GoodListVo {
     private String state;
     //缩略图
     private String thumbnail;
+    private String introduction;
     //所属分类id
     private Long categoryId;
     //价格

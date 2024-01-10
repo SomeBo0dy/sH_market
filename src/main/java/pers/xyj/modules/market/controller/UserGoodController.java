@@ -39,7 +39,7 @@ public class UserGoodController {
 
     @ApiOperation(value="修改商品信息")
     @SystemLog(businessName = "修改商品信息")
-    @PutMapping("/goods/upload")
+    @PutMapping("/goods/update")
     public ResponseResult goodUpdate(@RequestBody Good good){
         return goodService.goodUpdate(good);
     }

@@ -13,7 +13,7 @@ import pers.xyj.modules.market.domain.vo.OrderVo;
  */
 @Mapper
 public interface OrderMapper extends BaseMapper<Order> {
-    @Select("SELECT o.o_id, o.g_id,o.state,o.create_time,o.update_time,g.name,g.title, g.user_id as ownerId, u.nick_name, u.qq_number, g.thumbnail,g.prize " +
+    @Select("SELECT o.o_id, o.u_id, o.g_id,o.state,o.create_time,o.update_time,g.name,g.title, g.user_id as ownerId, u.nick_name, u.qq_number, g.thumbnail,g.prize " +
             "FROM sm_order o " +
             "JOIN sm_good g ON o.g_id = g.g_id " +
             "JOIN sys_user u ON g.user_id = u.id " +
@@ -21,7 +21,7 @@ public interface OrderMapper extends BaseMapper<Order> {
             "ORDER BY create_time DESC ")
     IPage<OrderVo> getPage(IPage<OrderVo> page, @Param("uId") Long userId, @Param("state") int orderState);
 
-    @Select("SELECT o.o_id, o.g_id,o.state,o.create_time,o.update_time,g.name,g.title, g.user_id as ownerId,u.nick_name, u.qq_number, g.thumbnail,g.prize " +
+    @Select("SELECT o.o_id, o.u_id, o.g_id,o.state,o.create_time,o.update_time,g.name,g.title, g.user_id as ownerId,u.nick_name, u.qq_number, g.thumbnail,g.prize " +
             "FROM sm_order o " +
             "JOIN sm_good g ON o.g_id = g.g_id " +
             "JOIN sys_user u ON g.user_id = u.id " +
@@ -29,7 +29,7 @@ public interface OrderMapper extends BaseMapper<Order> {
             "ORDER BY create_time DESC ")
     IPage<OrderVo> getOrderListByUserId(IPage<OrderVo> page,@Param("uId") Long userId);
 
-    @Select("SELECT o.o_id, o.g_id,o.state,o.create_time,o.update_time,g.name,g.title, g.user_id as ownerId,u.nick_name, u.qq_number, g.thumbnail,g.prize " +
+    @Select("SELECT o.o_id, o.u_id, o.g_id,o.state,o.create_time,o.update_time,g.name,g.title, g.user_id as ownerId,u.nick_name, u.qq_number, g.thumbnail,g.prize " +
             "FROM sm_order o " +
             "JOIN sm_good g ON o.g_id = g.g_id " +
             "JOIN sys_user u ON g.user_id = u.id " +
@@ -37,7 +37,7 @@ public interface OrderMapper extends BaseMapper<Order> {
             "ORDER BY create_time DESC ")
     IPage<OrderVo> getDealListByUserId(IPage<OrderVo> page,@Param("uId") Long userId);
 
-    @Select("SELECT o.o_id, o.g_id,o.state,o.create_time,o.update_time,g.name,g.title, g.user_id as ownerId,u.nick_name, u.qq_number, g.thumbnail,g.prize " +
+    @Select("SELECT o.o_id, o.u_id, o.g_id,o.state,o.create_time,o.update_time,g.name,g.title, g.user_id as ownerId,u.nick_name, u.qq_number, g.thumbnail,g.prize " +
             "FROM sm_order o " +
             "JOIN sm_good g ON o.g_id = g.g_id " +
             "JOIN sys_user u ON g.user_id = u.id " +

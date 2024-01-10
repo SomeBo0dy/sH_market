@@ -157,8 +157,6 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements Go
         if (Objects.isNull(good.getPrize())) {
             throw new SystemException(AppHttpCodeEnum.GOOD_PRICE_NOT_NULL);
         }
-        Long userId = SecurityUtils.getUserId();
-        good.setUserId(userId);
         updateById(good);
         return ResponseResult.okResult();
     }
@@ -240,8 +238,8 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, Good> implements Go
         Page<Good> page = new Page<>(pageNum, pageSize);
         page(page, queryWrapper);
         //封装vo
-        List<GoodListVo> goodListVos = BeanCopyUtils.copyBeanList(page.getRecords(), GoodListVo.class);
-        PageVo pageVo = new PageVo(goodListVos, page.getPages(), page.getTotal());
+//        List<GoodListVo> goodListVos = BeanCopyUtils.copyBeanList(page.getRecords(), GoodListVo.class);
+        PageVo pageVo = new PageVo(page.getRecords(), page.getPages(), page.getTotal());
         return ResponseResult.okResult(pageVo);
     }
 

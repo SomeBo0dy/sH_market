@@ -6,6 +6,7 @@ import java.util.Date;
 @Data
 public class OrderVo {
     private Long oId;
+    private Long uId;
     private Long gId;
     //0交易处理中，1交易成功
     private Integer state;
